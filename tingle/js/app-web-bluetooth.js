@@ -215,7 +215,7 @@ $(document).ready(function() {
      ********************************************************************************************************************/
 
     //Get JSON for pilot script
-    var pilotScriptJsonUrl = 'https://okgab.com/tinglemin/js/tinglePilotAppScript.json';
+    var pilotScriptJsonUrl = 'https://matterlab.io/json/tinglePilotAppScript.json';
     // var pilotScriptJsonUrl = 'https://github.com/ChildMindInstitute/matter-website/blob/gh-pages/tingle/tinglePilotAppScript.json?raw=true'; 
 
     var pilotScriptJsonData = {};
