@@ -60,6 +60,8 @@ var getSamplesTypeFlag = 0; //0=none 1=NN1T 2=NN1F 3=NN2T 4=NN2F
 var initialised = false;
 var timeout = null;
 
+var disconnectedCounter = 0; //allow a few disconnects before giving up connection
+
 //window.onload = function(){
 $(document).ready(function() {
 
@@ -82,14 +84,17 @@ $(document).ready(function() {
         setInterval(function() {
             //     bluetoothDataFlag = getBluetoothDataFlag();
 
+            //display time pressed for record button
+            buttonTimer();
+
             if (bluetoothDataFlag == true) {
 
-                //      state = getState();
-                /*    objectTempData = state.objectTemp;
-                    proximityData = state.proximityData;
-                    accelerometerData = state.accelerometer;
-                    ambientTempData = state.ambientTemp;
-                    heartRateData = state.heartRate; */
+                if( !$("#connect").hasClass("connected") ){
+                    $("#connect").addClass("connected");
+                    $("#console").html("Connected");
+                    disconnectedCounter = 0;
+                }
+
                 timeStamp = new Date().getTime();
 
                 //load data into global array
@@ -203,6 +208,15 @@ $(document).ready(function() {
                 $("#connect").html(speed.toFixed(2) + 'Hz');
 
                 bluetoothDataFlag = false;
+
+            } else {  //if not connected to Bluetooth
+                disconnectedCounter++;
+                if( $("#connect").hasClass("connected") && disconnectedCounter > 15){
+                    disconnectedCounter = 0;
+                    $("#connect").removeClass("connected");
+                    $("#console").html("Disconnected");
+                    $("#connect").html("Connect");
+                }
             }
 
         }, 200); //200 = 5Hz limit
@@ -215,7 +229,7 @@ $(document).ready(function() {
      ********************************************************************************************************************/
 
     //Get JSON for pilot script
-    var pilotScriptJsonUrl = 'https://matterlab.io/json/tinglePilotAppScript.json';
+    var pilotScriptJsonUrl = 'https://okgab.com/tinglemin/js/tinglePilotAppScript.json';
     // var pilotScriptJsonUrl = 'https://github.com/ChildMindInstitute/matter-website/blob/gh-pages/tingle/tinglePilotAppScript.json?raw=true'; 
 
     var pilotScriptJsonData = {};
@@ -766,13 +780,29 @@ $(document).ready(function() {
     });
 
     // indicate on target when button is pressed
+    var scriptTimer = 0;
+    function buttonTimer(){
+        if(onTarget){
+            if(scriptTimer == 0) scriptTimer = new Date().getTime();
+            var currentScriptTime = new Date().getTime();
+            var displayScriptTime = (currentScriptTime - scriptTimer) / 1000;
+            displayScriptTime = displayScriptTime.toFixed(1);
+            $("#script-clock").html(displayScriptTime + "s");
+        }
+    }
+
     $("#script-this-step").mousedown(function() {
         onTarget = true;
+
         //   sendDatabaseFlag =  true;
         $("#script-this-step").addClass("on-target");
         $("#script-this-step-toggle").html("ON TARGET");
+        
     }).mouseup(function() {
         onTarget = false;
+
+        scriptTimer = 0;
+        $("#script-clock").html(" ");
         //   sendDatabaseFlag = false;
         $("#script-this-step").removeClass("on-target");
         $("#script-this-step-toggle").html("OFF TARGET");

@@ -296,11 +296,11 @@
     }
     #console{
     	width: 100%;
-        padding-top: 8px;
-        padding-bottom: 8px;
+        padding-top: 4px;
+        padding-bottom: 4px;
       	display: inline-block;
       	margin-top:0px; margin-bottom: 0px;
-      	font-size: 12px;
+      	font-size: 14px;
       	color:white;
     }
     .console span{
@@ -1041,6 +1041,13 @@ img.hand-face-img{
 #device-configuration-container{
 	display: inline-block;
 }
+#script-clock{
+	position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 1.5rem;
+    font-style: normal;
+}
   </style>
 
 
@@ -1111,6 +1118,7 @@ img.hand-face-img{
           <div id="last-label">LAST</div>
           <div id="next-label">NEXT</div> -->
           <div id="script-this-step" class="script-step" ><div id="this-step-text">This Step Lorem ipsum dolor</div>
+          	  <div id="script-clock"></div>
               <div id="script-this-step-toggle">OFF TARGET</div>
               <div id="script-this-step-num"></div>
           </div>
